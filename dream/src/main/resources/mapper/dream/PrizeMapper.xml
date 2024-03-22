@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dream.mapper.PrizeMapper">
+    
+    <resultMap type="Prize" id="PrizeResult">
+        <result property="id"    column="id"    />
+        <result property="picture"    column="picture"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="type"    column="type"    />
+        <result property="name"    column="name"    />
+        <result property="point"    column="point"    />
+        <result property="buyNumber"    column="buy_number"    />
+    </resultMap>
+
+    <sql id="selectPrizeVo">
+        select id, picture, introduction, type, name, point, buy_number from prize
+    </sql>
+
+
+    <select id="selectPrizeList" parameterType="Prize" resultMap="PrizeResult">
+        <include refid="selectPrizeVo"/>
+        <where>  
+            <if test="introduction != null  and introduction != ''"> and introduction like concat('%', #{introduction}, '%')</if>
+            <if test="type != null  and type != ''"> and type like concat('%', #{type}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectPrizeById" parameterType="Long" resultMap="PrizeResult">
+        <include refid="selectPrizeVo"/>
+        where id = #{id}
+    </select>
+
+
+        
+    <insert id="insertPrize" parameterType="Prize" useGeneratedKeys="true" keyProperty="id">
+        insert into prize
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="picture != null">picture,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="type != null">type,</if>
+            <if test="name != null">name,</if>
+            <if test="point != null">point,</if>
+            <if test="buyNumber != null">buy_number,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="picture != null">#{picture},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="type != null">#{type},</if>
+            <if test="name != null">#{name},</if>
+            <if test="point != null">#{point},</if>
+            <if test="buyNumber != null">#{buyNumber},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePrize" parameterType="Prize">
+        update prize
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="point != null">point = #{point},</if>
+            <if test="buyNumber != null">buy_number = #{buyNumber},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePrizeById" parameterType="Long">
+        delete from prize where id = #{id}
+    </delete>
+
+    <delete id="deletePrizeByIds" parameterType="String">
+        delete from prize where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--    <select id="selectChildList" parameterType="Child" resultMap="ChildResult">-->
+<!--        <include refid="selectChildVo"/>-->
+<!--        <where>-->
+<!--            <if test="introduction != null  and introduction != ''"> and introduction like concat('%', #{introduction}, '%')</if>-->
+<!--            <if test="id != null  and id != ''"> and type like concat('%', #{type}, '%')</if>-->
+<!--        </where>-->
+<!--    </select>-->
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dream.mapper.ChildMapper">
+    
+    <resultMap type="Child" id="ChildResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="address"    column="address"    />
+        <result property="totalPoint"    column="total_point"    />
+        <result property="leftPoint"    column="left_point"    />
+        <result property="age"    column="age"    />
+        <result property="grade"    column="grade"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="picture"    column="picture"    />
+        <result property="top"    column="top"    />
+    </resultMap>
+
+    <sql id="selectChildVo">
+        select id, name, introduction, address, total_point, left_point, age, grade, telephone, picture, top from child
+    </sql>
+
+    <select id="selectChildList" parameterType="Child" resultMap="ChildResult">
+        <include refid="selectChildVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="totalPoint != null "> and total_point = #{totalPoint}</if>
+            <if test="leftPoint != null "> and left_point = #{leftPoint}</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="telephone != null  and telephone != ''"> and telephone = #{telephone}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="top != null "> and top = #{top}</if>
+        </where>
+    </select>
+    
+    <select id="selectChildById" parameterType="Long" resultMap="ChildResult">
+        <include refid="selectChildVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertChild" parameterType="Child">
+        insert into child
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="address != null">address,</if>
+            <if test="totalPoint != null">total_point,</if>
+            <if test="leftPoint != null">left_point,</if>
+            <if test="age != null">age,</if>
+            <if test="grade != null">grade,</if>
+            <if test="telephone != null">telephone,</if>
+            <if test="picture != null">picture,</if>
+            <if test="top != null">top,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="address != null">#{address},</if>
+            <if test="totalPoint != null">#{totalPoint},</if>
+            <if test="leftPoint != null">#{leftPoint},</if>
+            <if test="age != null">#{age},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="telephone != null">#{telephone},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="top != null">#{top},</if>
+         </trim>
+    </insert>
+
+    <update id="updateChild" parameterType="Child">
+        update child
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="totalPoint != null">total_point = #{totalPoint},</if>
+            <if test="leftPoint != null">left_point = #{leftPoint},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="telephone != null">telephone = #{telephone},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="top != null">top = #{top},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteChildById" parameterType="Long">
+        delete from child where id = #{id}
+    </delete>
+
+    <delete id="deleteChildByIds" parameterType="String">
+        delete from child where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
